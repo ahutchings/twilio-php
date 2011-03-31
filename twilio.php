@@ -284,7 +284,7 @@
         }
         
         function addRecord($attr = array()){
-            return self::append(new TwilioRecord(NULL, $attr));    
+            return self::append(new TwilioRecord($attr));    
         }
         
         function addHangup(){
