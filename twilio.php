@@ -264,7 +264,7 @@
     
         /* Convenience Methods */
         function addSay($body=NULL, $attr = array()){
-            return self::append(new Say($body, $attr));    
+            return self::append(new TwilioSay($body, $attr));    
         }
         
         function addPlay($body=NULL, $attr = array()){
@@ -284,15 +284,15 @@
         }
         
         function addRecord($attr = array()){
-            return self::append(new Record(NULL, $attr));    
+            return self::append(new TwilioRecord(NULL, $attr));    
         }
         
         function addHangup(){
-            return self::append(new Hangup());    
+            return self::append(new TwilioHangup());    
         }
         
         function addRedirect($body=NULL, $attr = array()){
-            return self::append(new Redirect($body, $attr));    
+            return self::append(new TwilioRedirect($body, $attr));    
         }
         
         function addPause($attr = array()){
@@ -300,7 +300,7 @@
         }
         
         function addConference($body=NULL, $attr = array()){
-            return self::append(new Conference($body, $attr));    
+            return self::append(new TwilioConference($body, $attr));    
         }
         
         function addSms($body=NULL, $attr = array()){
@@ -330,7 +330,7 @@
         
     }
     
-    class Response extends Verb {
+    class TwilioResponse extends Verb {
         
         private $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response></Response>";
         
@@ -370,13 +370,13 @@
     * The <Say> verb converts text to speech that is read back to the caller.
     * <Say> is useful for development or saying dynamic text that is difficult to pre-record.
     */
-    class Say extends Verb {
+    class TwilioSay extends Verb {
     
         protected $valid = array('voice','language','loop');
         /**
-        * Say Constructor
+        * TwilioSay Constructor
         * 
-        * Instatiates a new Say object with text and optional attributes.
+        * Instatiates a new TwilioSay object with text and optional attributes.
         * Possible attributes are:
         * 	"voice" => 'man'|'woman',
         *   "language" => 'en'|'es'|'fr'|'de',
@@ -384,7 +384,7 @@
         *
         * @param string $text
         * @param array $attr Optional attributes
-        * @return Say
+        * @return TwilioSay
         */
         function __construct($text='', $attr = array()) {
 			parent::__construct($text, $attr);
@@ -402,19 +402,19 @@
 	* way to prevent Twilio from answering a call. Any other response will 
 	* result in an answered call and your account will be billed.
 	*/
-	class Reject extends Verb {
+	class TwilioReject extends Verb {
 		
 		protected $valid = array('reason');
 		
         /**
-        * Reject Constructor
+        * TwilioReject Constructor
         * 
-        * Instatiates a new Reject object with optional attributes.
+        * Instatiates a new TwilioReject object with optional attributes.
         * Possible attributes are:
         * 	"reason" => 'rejected'|'busy',
         *
         * @param array $attr Optional attributes, defaults to 'rejected'
-        * @return Reject
+        * @return TwilioReject
         */
         function __construct($attr = array()) {
 			parent::__construct($attr);
@@ -450,15 +450,15 @@
     * text transcriptions of recorded calls by setting the 'transcribe' 
     * attribute of the <Record> verb to 'true'.
     */
-    class Record extends Verb {
+    class TwilioRecord extends Verb {
     
         protected $valid = array('action','method','timeout','finishOnKey',
 								 'maxLength','transcribe','transcribeCallback', 'playBeep');
 		
 		/**
-        * Record Constructor
+        * TwilioRecord Constructor
         * 
-        * Instatiates a new Record object with optional attributes.
+        * Instatiates a new TwilioRecord object with optional attributes.
         * Possible attributes are:
         * 	"action" =>  relative or absolute url, (default: current url)
         * 	"method" => 'GET'|'POST', (default: POST)
@@ -470,7 +470,7 @@
         * 	"playBeep" => true|false, (default: true)
         *
         * @param array $attr Optional attributes
-        * @return Record
+        * @return TwilioRecord
         */
         function __construct($attr = array()) {
 			parent::__construct($attr);
@@ -507,7 +507,7 @@
         * 	"timeLimit"	=> integer >= 0, (default: 14400, 4hrs)
         * 	"callerId" => valid phone #, (default: Caller's callerid)
         *
-        * @param string|Number|Conference $number The number or conference you wish to call
+        * @param string|Number|TwilioConference $number The number or conference you wish to call
         * @param array $attr Optional attributes
         * @return Dial
         */
@@ -520,20 +520,20 @@
     * The <Redirect> verb transfers control of a call to the TwiML at a 
     * different URL. All verbs after <Redirect> are unreachable and ignored.
     */
-    class Redirect extends Verb {
+    class TwilioRedirect extends Verb {
     
         protected $valid = array('method');
         
         /**
-        * Redirect Constructor
+        * TwilioRedirect Constructor
         * 
-        * Instatiates a new Redirect object with text and optional attributes.
+        * Instatiates a new TwilioRedirect object with text and optional attributes.
         * Possible attributes are:
         * 	"method" => 'GET'|'POST', (default: POST)
         *
         * @param string $url An absolute or relative URL for a different TwiML document.
         * @param array $attr Optional attributes
-        * @return Redirect
+        * @return TwilioRedirect
         */
         function __construct($url='', $attr = array()) {
 			parent::__construct($url, $attr);
@@ -570,14 +570,14 @@
     * your account. The only way to not answer a call and prevent billing 
     * is to use the <Reject> verb.
     */
-    class Hangup extends Verb {
+    class TwilioHangup extends Verb {
     
     	/**
-        * Hangup Constructor
+        * TwilioHangup Constructor
         * 
-        * Instatiates a new Hangup object.
+        * Instatiates a new TwilioHangup object.
         * 
-        * @return Hangup
+        * @return TwilioHangup
         */
         function __construct() {
             parent::__construct(NULL, array());
@@ -667,15 +667,15 @@
     * different accounts would not. The maximum number of participants in a 
     * single Twilio conference room is 40.
     */
-    class Conference extends Verb {
+    class TwilioConference extends Verb {
     
         protected $valid = array('muted','beep','startConferenceOnEnter',
             'endConferenceOnExit','waitUrl','waitMethod');
         
         /**
-        * Conference Constructor
+        * TwilioConference Constructor
         * 
-        * Instatiates a new Conference object with room and optional attributes.
+        * Instatiates a new TwilioConference object with room and optional attributes.
         * Possible attributes are:
         * 	"muted"	=> true|false, (default: false)
         * 	"beef"	=> true|false, (default: true)
@@ -687,7 +687,7 @@
         *
         * @param string $room Conference room to join
         * @param array $attr Optional attributes
-        * @return Conference
+        * @return TwilioConference
         */
          function __construct($room = '', $attr = array()){
             parent::__construct($room, $attr);
