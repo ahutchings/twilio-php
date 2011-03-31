@@ -211,7 +211,7 @@
                 $attr = $body;
                 $body = NULL;
             }
-            $this->tag = get_class($this);
+            $this->tag = str_replace('Twilio', '', get_class($this));
             $this->body = $body;
             $this->attr = array();
             $this->children = array();
@@ -244,7 +244,7 @@
                 throw new TwilioException($this->tag ." doesn't support nesting");
             else if(!is_object($verb))
                 throw new TwilioException($verb->tag . " is not an object");
-            else if(!in_array(get_class($verb), $this->nesting))
+            else if(!in_array(str_replace('Twilio', '', get_class($verb)), $this->nesting))
                 throw new TwilioException($verb->tag . " is not an allowed verb here");
             else {
                 $this->children[] = $verb;
