@@ -304,7 +304,7 @@
         }
         
         function addSms($body=NULL, $attr = array()){
-            return self::append(new Sms($body, $attr));    
+            return self::append(new TwilioSms($body, $attr));    
         }
         
         /*
@@ -697,13 +697,13 @@
     /**
     * The <Sms> verb sends an SMS message to a phone number during a phone call.
     */
-    class Sms extends Verb {
+    class TwilioSms extends Verb {
         protected $valid = array('to', 'from', 'action', 'method', 'statusCallback');
         
         /**
-        * SMS Constructor
+        * TwilioSMS Constructor
         * 
-        * Instatiates a new SMS object with room and optional attributes.
+        * Instatiates a new TwilioSMS object with room and optional attributes.
         * Possible attributes are:
         * 	"to"	=> phone #
         * 	"from"	=> sms capable phone #
@@ -713,7 +713,7 @@
         *
         * @param string $message SMS message to send
         * @param array $attr Optional attributes
-        * @return SMS
+        * @return TwilioSMS
         */
          function __construct($message = '', $attr = array()){
             parent::__construct($message, $attr);
